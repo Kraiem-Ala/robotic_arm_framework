@@ -131,4 +131,34 @@ std::vector<std::tuple<std::vector<float>, std::vector<float>, std::vector<float
 void robot::Robot_resume()
 {
 }
+MatrixXf robot::Inverse_kinematics_d(MatrixXf Xd, double gamma)
+{
+	int iteration = 0, size = this->_alfa.size();
+	MatrixXf i_1_theta(size, 1);
+	MatrixXf i_theta(size, 1);
+	MatrixXf e(size, 1);
+	for (size_t i = 0; i < size; i++)
+	{
+		i_theta(i, 0) = M_PI / 7;
+	}
+	MatrixXf FWD = FWD_Kinematics_vector(i_theta, _alfa, _r, _d);
+	e = Xd - FWD;
 
+	while (((std::abs(e(0, 0)) > 0.00001) || (std::abs(e(1, 0)) > 0.00001) || (std::abs(e(2, 0)) > 0.00001)) && (iteration < 2500))
+	{
+
+		iteration++;
+		MatrixXf invJ = computePseudoInverse_vector(i_theta, _alfa, _r, _d);
+
+		i_1_theta = i_theta + gamma*invJ * e;
+
+		FWD = FWD_Kinematics_vector(i_1_theta, _alfa, _r, _d);
+
+		e = Xd - FWD;
+		i_theta = i_1_theta;
+		//std::cout << iteration <<"\n";
+		// std::cout << i_theta * (180 / M_PI) << std::endl;
+	}
+	std::cout << "Done in " << iteration << " iterations" << std::endl;
+	return i_theta;
+}

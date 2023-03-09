@@ -19,6 +19,7 @@ class robot
 		void add_DH_line(double alfa, double r, double d);
 		MatrixXf FWD_kinematics(MatrixXf Q);
 		MatrixXf Inverse_kinematics(MatrixXf Xd);
+		MatrixXf Inverse_kinematics_d(MatrixXf Xd,double gamma);
 		std::vector<std::tuple<std::vector<float>, std::vector<float>, std::vector<float>>>Trajectory_generation_Qubic(float t0, float tf, std::vector<std::vector<float>> vec_q0, std::vector<std::vector<float>> vec_qf, int n);
 		std::vector<std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vector<float>>>Trajectory_generation_Quintic(float t0, float tf, std::vector<std::vector<float>> vec_q0, std::vector<std::vector<float>> vec_qf, int n);
 		std::vector < std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vector<float>, std::vector<float>>>Trajectory_generation_via_points(float t0, float t1, float t2, float t3, std::vector<std::vector<float>> vec_q0x, std::vector<std::vector<float>> vec_qwx, std::vector<std::vector<float>> vec_q3x, int n);
