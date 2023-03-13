@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="new_robot">
+  <link name="world" />
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="5.6802E-18 1.0977E-17 0.10718"
+        rpy="0 0 0" />
+      <mass
+        value="1.4266" />
+      <inertia
+        ixx="0.27368"
+        ixy="-8.7055E-18"
+        ixz="1.2151E-18"
+        iyy="0.27368"
+        iyz="6.4171E-18"
+        izz="0.3697" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/base_link.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/base_link.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="world_to_base_link=" type="fixed">
+     <parent link="world"/>
+     <child link="base_link"/>
+</joint>
+  <link
+    name="Link1">
+    <inertial>
+      <origin
+        xyz="9.7321E-08 -3.1895E-07 0.17349"
+        rpy="0 0 0" />
+      <mass
+        value="1.3373" />
+      <inertia
+        ixx="0.21933"
+        ixy="-6.9393E-08"
+        ixz="-6.9578E-07"
+        iyy="0.28616"
+        iyz="5.2245E-07"
+        izz="0.194" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/link1.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/link1.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="theta1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.14"
+      rpy="0 0 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="Link1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.1416"
+      upper="3.1416"
+      effort="1e+03"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="Link2">
+    <inertial>
+      <origin
+        xyz="-0.36305 -5.6248E-17 -1.237E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.98588" />
+      <inertia
+        ixx="0.1025"
+        ixy="-2.9268E-17"
+        ixz="4.2384E-18"
+        iyy="1.2333"
+        iyz="1.1984E-17"
+        izz="1.2018" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link2.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link2.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="theta2"
+    type="revolute">
+    <origin
+      xyz="0 0 0.29"
+      rpy="0 1.5708 0" />
+    <parent
+      link="Link1" />
+    <child
+      link="Link2" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="1e+03"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="Link3">
+    <inertial>
+      <origin
+        xyz="0.375 4.2448E-16 -2.0719E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.64576" />
+      <inertia
+        ixx="0.1081"
+        ixy="1.4484E-16"
+        ixz="-7.482E-17"
+        iyy="0.41212"
+        iyz="2.7366E-17"
+        izz="0.40914" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link3.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1.0 1.0 1.0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link3.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="theta3"
+    type="revolute">
+    <origin
+      xyz="-0.75 0 0"
+      rpy="0 0 3.1416" />
+    <parent
+      link="Link2" />
+    <child
+      link="Link3" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="1e+03"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="Link4">
+    <inertial>
+      <origin
+        xyz="0.15857 1.7312E-11 4.9209E-11"
+        rpy="0 0 0" />
+      <mass
+        value="1.7525" />
+      <inertia
+        ixx="0.1008"
+        ixy="4.6324E-11"
+        ixz="4.0478E-11"
+        iyy="0.45113"
+        iyz="-6.4583E-07"
+        izz="0.44659" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link4.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/Link4.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="theta4"
+    type="revolute">
+    <origin
+      xyz="0.75 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link3" />
+    <child
+      link="Link4" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.8"
+      upper="1.5708"
+      effort="1e+03"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="gripper">
+    <inertial>
+      <origin
+        xyz="2.6512E-16 1.2984E-16 0.13193"
+        rpy="0 0 0" />
+      <mass
+        value="0.4717" />
+      <inertia
+        ixx="0.023498"
+        ixy="2.1684E-18"
+        ixz="-4.1278E-19"
+        iyy="0.023498"
+        iyz="-7.0697E-19"
+        izz="0.026594" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/gripper.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/gripper.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="yaw"
+    type="revolute">
+    <origin
+      xyz="0.35 0 0"
+      rpy="1.5708 1.4291 1.5708" />
+    <parent
+      link="Link4" />
+    <child
+      link="gripper" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="1e+03"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="finger1">
+    <inertial>
+      <origin
+        xyz="-0.02663 0.051522 -1.2968E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.013632" />
+      <inertia
+        ixx="0.00035315"
+        ixy="0.00017957"
+        ixz="9.0105E-10"
+        iyy="0.00011951"
+        iyz="-1.8706E-09"
+        izz="0.00044295" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger1.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger1.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="alfa1"
+    type="revolute">
+    <origin
+      xyz="-0.085443 -0.04933 0.18"
+      rpy="1.5708 0.37564 -2.618" />
+    <parent
+      link="gripper" />
+    <child
+      link="finger1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1"
+      upper="0.6"
+      effort="10"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="finger2">
+    <inertial>
+      <origin
+        xyz="-0.02663 0.051521 -1.2734E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.013632" />
+      <inertia
+        ixx="0.00035316"
+        ixy="0.00017957"
+        ixz="6.0015E-10"
+        iyy="0.00011951"
+        iyz="-1.5746E-09"
+        izz="0.00044295" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger2.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger2.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="alfa2"
+    type="revolute">
+    <origin
+      xyz="0 0.098661 0.18"
+      rpy="1.5708 0.25607 1.5708" />
+    <parent
+      link="gripper" />
+    <child
+      link="finger2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0"
+      upper="0.6"
+      effort="10"
+      velocity="1.57" />
+  </joint>
+  <link
+    name="finger3">
+    <inertial>
+      <origin
+        xyz="-0.026625 0.051513 -1.2895E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.013632" />
+      <inertia
+        ixx="0.00035315"
+        ixy="0.00017957"
+        ixz="9.2368E-10"
+        iyy="0.00011951"
+        iyz="-1.8522E-09"
+        izz="0.00044295" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger3.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_robot/meshes/finger3.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="alfa3"
+    type="revolute">
+    <origin
+      xyz="0.085443 -0.04933 0.18"
+      rpy="1.5708 0.53588 -0.5236" />
+    <parent
+      link="gripper" />
+    <child
+      link="finger3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0"
+      upper="0.6"
+      effort="10"
+      velocity="1.57" />
+  </joint>
+<!-- Adding Ros control plugins -->
+<!-- adding Actuators -->
+  <transmission name="transmission1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="transmission2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="transmission3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="transmission4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="yaw">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="transmission5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="alfa1">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="alfa2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="alfa3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor7">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+   <transmission name="transmission8">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="theta4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor8">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!-- Adding Gazebo plugin-->
+  <gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+  <robotNamespace>/</robotNamespace>
+  </plugin>
+  </gazebo>
+
+</robot>
