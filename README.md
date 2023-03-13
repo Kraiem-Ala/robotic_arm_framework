@@ -7,7 +7,7 @@
 ## test demo :
 <br />
 <div align="center">
-    <img src="test1.gif" alt="Logo" width="400" height="400">
+    <img src="test1.gif" alt="Logo" width="600" height="400">
     <img src="test2.gif" alt="Logo" width="400" height="400">
   </a>
 </div>
