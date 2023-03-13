@@ -297,3 +297,25 @@ std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vect
 
     return std::make_tuple(time, qd, d_qd, dd_qd, ddd_qd);
 }
+
+std::tuple<std::vector<float>, std::vector<MatrixXf>, std::vector<MatrixXf>> computeCubicTraj_vect(MatrixXf q0 , MatrixXf qf, MatrixXf q0_d, MatrixXf qf_d, float t0, float tf, int n)
+{
+    MatrixXf a0 = q0;
+    MatrixXf a1 = q0_d;
+    MatrixXf a2 = (3/std::pow(tf,2)) *(qf-q0) - (2 / tf) * q0_d - (1/tf)*qf_d;
+    MatrixXf a3 = (-2 / std::pow(tf, 3)) * (qf - q0) + (1 / tf) * (qf_d + q0_d);
+    std::vector<MatrixXf> q, d_q;
+    std::vector<float> time;
+    float step = (tf - t0) / n;
+    for (float t = t0; t < tf+step ; t+=step)
+    {
+        MatrixXf qi = (a0 + a1 * t + a2 * std::pow(t, 2) + a3 * std::pow(t, 3));
+        MatrixXf d_qi = (a1 + 2*a2* t + 3*a3 * std::pow(t, 2));
+        q.push_back(qi);
+        d_q.push_back(d_qi);
+        time.push_back(t);
+       
+    }
+    std::cout << "size" << q.size()<< "\n";
+    return std::make_tuple(time, q, d_q);
+}

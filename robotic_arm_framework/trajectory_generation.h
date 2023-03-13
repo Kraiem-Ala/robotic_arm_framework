@@ -33,3 +33,6 @@ std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vect
 MatrixXf compute7orderCoeff(float t0, float t1, float t2, float t3, std::vector<float> vec_q0x, std::vector<float> vec_qwx, std::vector<float> vec_q3x);
 std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vector<float>, std::vector<float>> computeWaypointTraj(MatrixXf A, float t0, float t3, int n);
 
+
+std::tuple<std::vector<float>, std::vector<MatrixXf>, std::vector<MatrixXf>> computeCubicTraj_vect(MatrixXf q0, MatrixXf qf, MatrixXf q0_d, MatrixXf qf_d, float t0, float tf, int n);
+
