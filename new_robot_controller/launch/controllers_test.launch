@@ -1,0 +1,15 @@
+<launch>
+  <rosparam file="$(find new_robot_controller)/config/controllers.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="  robot_teta_controllers"/>
+
+<!--"teta1_position_controller teta2_position_controller teta3_position_controller teta4_position_controller gripper_position_controller"/>-->
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+  </node>
+
+</launch>
