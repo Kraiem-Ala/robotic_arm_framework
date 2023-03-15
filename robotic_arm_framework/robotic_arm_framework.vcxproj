@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IK_mod.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="robot.h" />
     <ClInclude Include="trajectory_generation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IK_mod.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="robot.cpp" />
     <ClCompile Include="robot_class_test.cpp" />
     <ClCompile Include="test.cpp" />
