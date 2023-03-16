@@ -22,7 +22,6 @@ MatrixXf RotYaw(double theta);
 * @param[theta] rotation angle over Y
 * @return Rotation matrix of Pitch
 */
-
 MatrixXf RotPitch(double theta);
 
 
@@ -64,11 +63,12 @@ MatrixXf jacobian(double theta1, double theta2, double theta3);
 
 /**
 * @breif Calculate the Jacobian Matrix
-* @param[theta_i] joint' angles
+* @param[tfull_jacobianheta_i] joint' angles
 * @return Jacobian Matrix of the robot type MatrixXf
 */
 MatrixXf jacobian_vect(MatrixXf theta, std::vector<double> alpha, std::vector<double> r , std::vector<double> d);
 MatrixXf jacobian(std::vector<double> theta, MatrixXf DH_table);
+MatrixXf full_jacobian(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
 
 
 /**
@@ -78,6 +78,7 @@ MatrixXf jacobian(std::vector<double> theta, MatrixXf DH_table);
 */
 MatrixXf computePseudoInverse(float theta1, float theta2, float theta3);
 MatrixXf computePseudoInverse_vector(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
+MatrixXf computePseudoInverse_full(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
 
 
 /**
@@ -96,3 +97,10 @@ MatrixXf FWD_Kinematics_vector(MatrixXf theta, std::vector<double> alpha, std::v
 */
 MatrixXf Newton_Raphson_IK();
 MatrixXf Newton_Raphson_IK_vector(MatrixXf X_d, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
+
+/**
+* @breif Calculate the rotation Matrix on the Y axis
+* @param[theta] rotation angle over Y
+* @return Rotation matrix of Pitch
+*/
+MatrixXf Compute_orientation(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);

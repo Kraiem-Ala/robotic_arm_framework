@@ -2,25 +2,35 @@
 #include "Quaternion.h"
 void main()
 {
-	//robot robot1;
-	//robot1.add_link("Base_link", 0.0, Joint_Revolute, Joint_Axis_Y, true);
-	//robot1.add_link("link1", 1.0, Joint_Revolute, Joint_Axis_Y, false);
-	//robot1.add_link("link2", 1.0, Joint_Revolute, Joint_Axis_Z, false);
-	//robot1.add_link("link3", 1.0, Joint_Revolute, Joint_Axis_Z, false);
-	////robot1.add_link("link4", 1.0, Joint_Revolute, Joint_Axis_Z, false);
-	//MatrixXf theta(3,1), Xd(3, 1), fwd(3,1), Xf(3, 1);
-	//theta(0, 0) = M_PI / 10;
-	//theta(1, 0) = M_PI / 10;
-	//theta(2, 0) = M_PI / 10;
-	//
-	//
-	//Xd(0, 0) = 0.544895;
-	//Xd(1, 0) = 0.943786;
-	//Xd(2, 0) = 2.63099;
+	robot robot1;
+	robot1.add_link("Base_link", 0.25, Joint_Revolute, Joint_Axis_Y, true);
+	robot1.add_link("link1", 0.175, Joint_Revolute, Joint_Axis_Y, false);
+	robot1.add_link("link2", 0.75, Joint_Revolute, Joint_Axis_Z, false);
+	robot1.add_link("link3", 0.75, Joint_Revolute, Joint_Axis_Z, false);
+	robot1.add_link("link4", 0.55, Joint_Revolute, Joint_Axis_Z, false);
+	robot1.add_link("link5", 0.1, Joint_Revolute, Joint_Axis_Y, false);
+	MatrixXf theta(5,1), Xd(3, 1), fwd(3,1), Xf(3, 1);
+	theta(0, 0) = M_PI/3;
+	theta(1, 0) = M_PI/3;
+	theta(2, 0) = M_PI/3;
+	theta(3, 0) = M_PI/3;
+	theta(4, 0) = M_PI/3;
+	
+	
+	Xd(0, 0) = 0.75;
+	Xd(1, 0) = 0.0;
+	Xd(2, 0) = 1.0;
 
-	//Xf(0, 0) = 0.0;
-	//Xf(1, 0) = 0.0;
-	//Xf(2, 0) = 3.0;
+	Xf(0, 0) = M_PI/2;
+	Xf(1, 0) = M_PI / 2;
+	Xf(2, 0) = M_PI/2;
+
+	MatrixXf INV = robot1.Inverse_kinematics_Q(Xd, Xf, theta, 0.5);
+	std::cout << INV << "\nFWD of INV\n";
+	/*std::cout << robot1.FWD_kinematics(INV) << "\n";
+	std::cout << robot1.FWD_orientation(INV) << "\n ";*/
+
+
 
 	//std::vector<std::vector<float>> vec_q0;
 	//std::vector<std::vector<float>> vec_qf;
@@ -28,8 +38,10 @@ void main()
 	//float t0c = 0.0, tfc = 2.0;
 	//MatrixXf INV = robot1.Inverse_kinematics(Xd);
 	//std::cout << "Inverse 1 newton \n" << INV << "\n";
-	///*INV = robot1.Inverse_kinematics_d(Xd,0.5);
-	//std::cout << "Inverse 2 differatial \n" << INV << "\n";*/
+	INV = robot1.Inverse_kinematics_d(Xd,0.5);
+	std::cout << "Inverse 2 differatial \n" << INV << "\n";
+	/*std::cout << robot1.FWD_kinematics(INV) << "\n";
+	std::cout << robot1.FWD_orientation(INV) << "\n ";*/
 	//float q00 = INV(0, 0);
 	//float q01 = INV(1, 0);
 	//float q02 = INV(2, 0);
@@ -88,7 +100,7 @@ void main()
 
 	//std::cout << FWD_Kinematics(0.448614, 1.56882, 0.00396061) << "\n \n";
 	
-	MatrixXf q1(3, 1), q2(3, 1);
+	/*MatrixXf q1(3, 1), q2(3, 1);
 	q1(2, 0) = M_PI / 6;
 	q1(0, 0) = M_PI / 2;
 	q1(1, 0) = M_PI / 6;
@@ -97,6 +109,6 @@ void main()
 	
 	std::cout << Q1.r << "\n" << Q1.i << "\n \n";
 	std::cout << Q2.r << "\n" << Q2.i << "\n \n";
-	q2 = Q2.Quaternion2euleur();
-	std::cout << q2 << "\n \n";
+	std::cout << Q1 - Q2 << "\n";*/
+
 }

@@ -354,10 +354,94 @@ MatrixXf jacobian_vect(MatrixXf theta, std::vector<double> alpha, std::vector<do
 	return J;
 }
 
+MatrixXf full_jacobian(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d)
+{
+	int dimension = alpha.size();
+
+	std::vector<MatrixXf> DH;
+
+	MatrixXf DH1(4, 4);
+
+	for (size_t i = 0; i < alpha.size(); i++)
+	{
+		DH1 = Transformation_mat(alpha[i], theta(i, 0), r[i], d[i]);
+		DH.push_back(DH1);
+	}
+
+	std::vector<MatrixXf> D0;
+	std::vector<MatrixXf> D0R;
+	std::vector<MatrixXf> D0T;
+	MatrixXf D00;
+	D00 = Idendity();
+	D00 = D00 * DH[0];
+	D0.push_back(D00);
+	D0R.push_back(D00.block<3, 3>(0, 0));// rotation matrix
+	D0T.push_back(D00.block<3, 1>(0, 3));// position vector
+	for (size_t i = 1; i < DH.size(); i++)
+	{
+		D00 = D0.back() * DH[i];
+		D0.push_back(D00);
+		D0R.push_back(D00.block<3, 3>(0, 0));// rotation matrix
+		D0T.push_back(D00.block<3, 1>(0, 3));// position vector
+
+	}
+	Vector3f Ri(0, 0, 1);
+
+	std::vector<Vector3f> vecD0R;
+	for (size_t i = 0; i < D0R.size(); i++)
+	{
+		vecD0R.push_back(D0R[i] * Ri);
+	}
+	std::vector<Vector3f> vecD0T;
+	for (size_t i = 0; i < vecD0R.size(); i++)
+	{
+		vecD0T.push_back(Map<Vector3f>(D0T[i].data(), D0T[i].cols() * D0T[i].rows()));
+	}
+	std::vector<MatrixXf> J0,J1;
+	J0.push_back(Ri.cross(vecD0T.back()));
+	for (size_t i = 0; i < vecD0T.size(); i++)
+	{
+		J0.push_back(vecD0R[i].cross(vecD0T.back() - vecD0T[i]));
+		J1.push_back(vecD0R[i]);
+	}
+
+	//
+	//MatrixXf J1 = Ri.cross(vecD03T); //R00
+	//MatrixXf J2 = (vecD01R).cross(vecD03T - vecD01T);
+	//MatrixXf J3 = (vecD02R).cross(vecD03T - vecD02T);
+	//MatrixXf J4 = Ri;
+	//MatrixXf J5 = vecD01R;
+	//MatrixXf J6 = vecD02R;
+
+
+	MatrixXf J(6, dimension); // we consider only linear velocities
+
+	for (size_t i = 0; i < dimension; i++)
+	{
+		J(0, i) = J0[i](0, 0);
+		J(1, i) = J0[i](1, 0);
+		J(2, i) = J0[i](2, 0);
+		J(3, i) = J1[i](0, 0);
+		J(4, i) = J1[i](1, 0);
+		J(5, i) = J1[i](2, 0);
+
+	}
+
+	return J;
+}
+
 MatrixXf computePseudoInverse_vector(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d)
 {
 	
 	MatrixXf J = jacobian_vect(theta, alpha,r,d);
+	MatrixXf invJ = J.completeOrthogonalDecomposition().pseudoInverse();
+
+	return invJ;
+}
+
+MatrixXf computePseudoInverse_full(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d)
+{
+	MatrixXf J = full_jacobian(theta, alpha, r, d);
 	MatrixXf invJ = J.completeOrthogonalDecomposition().pseudoInverse();
 
 	return invJ;
@@ -414,4 +498,20 @@ MatrixXf Newton_Raphson_IK_vector(MatrixXf X_d, std::vector<double> alpha, std::
 	}
 	std::cout << "Done in " << iteration << " iterations" << std::endl;
 	return i_theta;
+}
+
+MatrixXf Compute_orientation(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d)
+{
+	std::vector<MatrixXf> DH;
+	MatrixXf DH0 = Idendity();
+	MatrixXf rot(3, 1);
+	for (size_t i = 0; i < alpha.size(); i++)
+	{
+		DH.push_back(Transformation_mat(alpha[i], theta(i, 0), r[i], d[i]));
+		DH0 = DH0 * DH.back();
+	}
+	rot(2,0) = atan2(DH0(1,0), DH0(0,0));
+	rot(1,0) = atan2(-1 * DH0(2, 0), sqrt(pow(DH0(2, 1), 2) + pow(DH0(2, 2), 2)));
+	rot(0,0) = atan2(DH0(2, 1), DH0(2, 2));
+	return rot;
 }

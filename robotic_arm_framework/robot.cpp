@@ -24,7 +24,7 @@ void robot::add_link(std::string Name, double length,std::string Type, std::stri
 			if (this->second == true)
 			{
 				this->_d.push_back(length + this->l0);
-				this->second == false;
+				this->second = false;
 			}
 			else
 			{
@@ -37,7 +37,7 @@ void robot::add_link(std::string Name, double length,std::string Type, std::stri
 			if (this->second == true)
 			{
 				this->_r.push_back(length + this->l0);
-				this->second == false;
+				this->second = false;
 			}
 			else
 			{
@@ -76,6 +76,11 @@ MatrixXf robot::FWD_kinematics(MatrixXf Q)
 	assert(link_names.size() > 1  && "Please Insert at least 2 links to start");
 	return(FWD_Kinematics_vector(Q, this->_alfa, this->_r, this->_d));
 }
+MatrixXf robot::FWD_orientation(MatrixXf Q)
+{
+	return(Compute_orientation(Q, this->_alfa, this->_r, this->_d));
+}
+
 /**
 * @breif alculates joints angles of the robot
 * @param[Xd] the X,Y,Z coordinates of the end effector
@@ -161,4 +166,52 @@ MatrixXf robot::Inverse_kinematics_d(MatrixXf Xd, double gamma)
 	}
 	std::cout << "Done in " << iteration << " iterations" << std::endl;
 	return i_theta;
+}
+MatrixXf robot::Inverse_kinematics_Q(MatrixXf Xd, MatrixXf Od, MatrixXf Init, double Gamma)
+{
+	int iteration = 0, size = this->_alfa.size();
+	MatrixXf i_1_theta(size, 1);
+	MatrixXf i_theta(size, 1);
+	MatrixXf ep(3, 1);
+	MatrixXf eo(3, 1);
+	i_theta = Init;
+	MatrixXf FWD_p = FWD_Kinematics_vector(i_theta, _alfa, _r, _d);
+	MatrixXf FWD_o = FWD_orientation(i_theta);
+	Quaternion ori = Quaternion(Od);
+	Quaternion orientation = Quaternion(FWD_o);
+	ep = Xd - FWD_p;
+	eo = ori - orientation;
+	MatrixXf e(6, 1);
+	e << ep, eo;
+	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) /*|| (std::abs(eo(0, 0)) > 0.01)*/ || (std::abs(eo(1, 0)) > 0.01) /*|| (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 5000))
+	{
+
+		iteration++;
+		MatrixXf invJ = computePseudoInverse_full(i_theta, _alfa, _r, _d);
+
+		i_1_theta = i_theta + Gamma * invJ * e;
+
+		FWD_p = FWD_Kinematics_vector(i_1_theta, _alfa, _r, _d);
+		FWD_o = FWD_orientation(i_theta);
+		orientation = Quaternion(FWD_o);
+		ep = Xd - FWD_p;
+		eo = ori - orientation;
+		e << ep, eo;
+		i_theta = i_1_theta;
+		//std::cout << iteration <<"\n";
+		// std::cout << i_theta * (180 / M_PI) << std::endl;
+	}
+	std::cout << "Done in " << iteration << " iterations" << std::endl;
+	//std::cout << "Last error \n" << ep << "\n" << eo << "\n";
+	return i_theta;
+}
+
+MatrixXf robot::Jacobian_xyz(MatrixXf theta)
+{
+	return( jacobian_vect(theta, this->_alfa, this->_r, this->_d));
+}
+
+MatrixXf robot::Full_jacobian(MatrixXf theta)
+{
+	return(full_jacobian(theta, this->_alfa, this->_r, this->_d));
 }
