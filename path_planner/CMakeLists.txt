@@ -21,7 +21,7 @@ include_directories(${Eigen_INCLUDE_DIRS})
 include_directories(include/${PROJECT_NAME}
                     ${catkin_INCLUDE_DIRS})
 
-add_library(trajectory_planner_lib src/IK_mod.cpp src/trajectory_generation.cpp src/robot.cpp)
+add_library(trajectory_planner_lib src/IK_mod.cpp src/trajectory_generation.cpp src/robot.cpp src/Quaternion.cpp)
 
 
 

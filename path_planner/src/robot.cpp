@@ -137,3 +137,58 @@ void robot::Robot_resume()
 	
 }
 
+MatrixXf robot::FWD_orientation(MatrixXf Q)
+{
+	return(Compute_orientation(Q, this->_alfa, this->_r, this->_d));
+}
+
+MatrixXf robot::Jacobian_xyz(MatrixXf theta)
+{
+	return( jacobian_vect(theta, this->_alfa, this->_r, this->_d));
+}
+
+MatrixXf robot::Full_jacobian(MatrixXf theta)
+{
+	return(full_jacobian(theta, this->_alfa, this->_r, this->_d));
+}
+
+MatrixXf robot::Inverse_kinematics_Q(MatrixXf Xd, MatrixXf Od, MatrixXf Init, double Gamma)
+{
+	int iteration = 0, size = this->_alfa.size();
+	MatrixXf i_1_theta(size, 1);
+	MatrixXf i_theta(size, 1);
+	MatrixXf ep(3, 1);
+	MatrixXf eo(3, 1);
+	i_theta = Init;
+	MatrixXf FWD_p = FWD_kinematics(i_theta);
+	MatrixXf FWD_o = FWD_orientation(i_theta);
+	Quaternion ori = Quaternion(Od);
+	Quaternion orientation = Quaternion(FWD_o);
+	ep = Xd - FWD_p;
+	eo = ori - orientation;
+	//eo = Od - FWD_o;
+	MatrixXf e(6, 1);
+	e << ep, eo;
+	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) /*|| (std::abs(eo(0, 0)) > 0.01) || (std::abs(eo(1, 0)) > 0.001) || (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 5000))
+	{
+
+		iteration++;
+		MatrixXf invJ = computePseudoInverse_full(i_theta, _alfa, _r, _d);
+
+		i_1_theta = i_theta + Gamma * invJ * e;
+
+		FWD_p = FWD_kinematics(i_theta);
+		FWD_o = FWD_orientation(i_theta);
+		eo = Od - FWD_o;
+		orientation = Quaternion(FWD_o);
+		ep = Xd - FWD_p;
+		eo = ori - orientation;
+		//e << ep, eo;
+		i_theta = i_1_theta;
+		//std::cout << iteration <<"\n";
+		// std::cout << i_theta * (180 / M_PI) << std::endl;
+	}
+	std::cout << "Done in " << iteration << " iterations" << std::endl;
+	//std::cout << "Last error \n" << ep << "\n" << eo << "\n";
+	return i_theta;
+}

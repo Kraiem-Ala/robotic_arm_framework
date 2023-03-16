@@ -9,7 +9,7 @@ robot_arm_controller:
         - theta2
         - theta3
         - theta4
-        #- yaw
+        - yaw
     constraints:
         goal_time: 0.5                   # Override default
         stopped_velocity_tolerance: 0.02 # Override default
@@ -22,14 +22,14 @@ robot_arm_controller:
             goal: 0.01                     # Not enforced if unspecified
         theta4:
             goal: 0.01                     # Not enforced if unspecified
-        #yaw:
-        #    goal: 0.01                     # Not enforced if unspecified   
+        yaw:
+            goal: 0.01                     # Not enforced if unspecified   
     gains: # Required because we're controlling an effort interface
         theta1: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
         theta2: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
         theta3: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
         theta4: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
-        #yaw: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
+        yaw: {p: 1450.0, i: 5.1, d: 50.0, i_clamp: 1}
 #Controller to control end effector joints
 
 
