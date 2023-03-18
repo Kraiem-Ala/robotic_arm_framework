@@ -3,32 +3,53 @@
 void main()
 {
 	robot robot1;
-	robot1.add_link("Base_link", 0.25, Joint_Revolute, Joint_Axis_Y, true);
-	robot1.add_link("link1", 0.175, Joint_Revolute, Joint_Axis_Y, false);
-	robot1.add_link("link2", 0.75, Joint_Revolute, Joint_Axis_Z, false);
-	robot1.add_link("link3", 0.75, Joint_Revolute, Joint_Axis_Z, false);
-	robot1.add_link("link4", 0.55, Joint_Revolute, Joint_Axis_Z, false);
-	robot1.add_link("link5", 0.1, Joint_Revolute, Joint_Axis_Y, false);
+	//robot1.add_link("Base_link", 0.25, Joint_Revolute, Joint_Axis_Y, true);
+	//robot1.add_link("link1", 0.175, Joint_Revolute, Joint_Axis_Y, false);
+	//robot1.add_link("link2", 0.75, Joint_Revolute, Joint_Axis_Z, false);
+	//robot1.add_link("link3", 0.75, Joint_Revolute, Joint_Axis_Z, false);
+	//robot1.add_link("link4", 0.55, Joint_Revolute, Joint_Axis_Z, false);
+	//robot1.add_link("link5", 0.1, Joint_Revolute, Joint_Axis_Y, false);
+	robot1.add_DH_line(1.5718,0.0,0.425);
+	robot1.add_DH_line(0, 0.75, 0.0);
+	robot1.add_DH_line(0, 0.75, 0.0);
+	robot1.add_DH_line(0, 0.65, 0.0);
+	robot1.add_DH_line(1.5718, 0.0, 0.0);
+
 	MatrixXf theta(5,1), Xd(3, 1), fwd(3,1), Xf(3, 1);
-	theta(0, 0) = M_PI/3;
-	theta(1, 0) = M_PI/3;
-	theta(2, 0) = M_PI/3;
-	theta(3, 0) = M_PI/3;
-	theta(4, 0) = M_PI/3;
+	theta(0, 0) = 0.0;//M_PI/3;
+	theta(1, 0) = 0.0;//M_PI/3;
+	theta(2, 0) = 0.0;//M_PI/3;
+	theta(3, 0) = 0.0;//M_PI/3;
+	theta(4, 0) = 0.0;//M_PI/3;
+	robot1.Robot_resume();
 	
+	Xd(0, 0) = -0.75;
+	Xd(1, 0) = -0.0001;
+	Xd(2, 0) = 0.525;
+
+	Xf(0, 0) = 0/2;
+	Xf(1, 0) = 0.0;
+	Xf(2, 0) = 0/2;
+
 	
-	Xd(0, 0) = 0.75;
-	Xd(1, 0) = 0.0;
-	Xd(2, 0) = 1.0;
-
-	Xf(0, 0) = M_PI/2;
-	Xf(1, 0) = M_PI / 2;
-	Xf(2, 0) = M_PI/2;
-
 	MatrixXf INV = robot1.Inverse_kinematics_Q(Xd, Xf, theta, 0.5);
-	std::cout << INV << "\nFWD of INV\n";
-	/*std::cout << robot1.FWD_kinematics(INV) << "\n";
-	std::cout << robot1.FWD_orientation(INV) << "\n ";*/
+	MatrixXf INV2 = INV;
+	//std::cout <<INV<<"\n FWD of INV\n" << robot1.FWD_kinematics(INV) << "\n";
+	INV(0, 0) = atan2(sin(INV(0, 0)) , cos(INV(0, 0)));
+	INV(1, 0) = atan2(sin(INV(1, 0)) , cos(INV(1, 0)));
+	INV(2, 0) = atan2(sin(INV(2, 0)) , cos(INV(2, 0)));
+	INV(3, 0) = atan2(sin(INV(3, 0)) , cos(INV(3, 0)));
+	INV(4, 0) = atan2(sin(INV(4, 0)) , cos(INV(4, 0)));
+	std::cout << INV << "\n FWD of INV \n" << robot1.FWD_kinematics(INV) << " INV arctan \n \n";
+
+	INV2(0, 0) = atan(sin(INV2(0, 0))/ cos(INV2(0, 0)));
+	INV2(1, 0) = atan(sin(INV2(1, 0))/ cos(INV2(1, 0)));
+	INV2(2, 0) = atan(sin(INV2(2, 0))/ cos(INV2(2, 0)));
+	INV2(3, 0) = atan(sin(INV2(3, 0))/ cos(INV2(3, 0)));
+	INV2(4, 0) = atan(sin(INV2(4, 0))/ cos(INV2(4, 0)));
+	std::cout << INV2 << "\n FWD of INV2\n" << robot1.FWD_kinematics(INV2) << "\n";
+	//std::cout << robot1.FWD_kinematics(INV) << "\n";
+	//std::cout << robot1.FWD_orientation(INV) << "\n ";
 
 
 
@@ -36,11 +57,12 @@ void main()
 	//std::vector<std::vector<float>> vec_qf;
 
 	//float t0c = 0.0, tfc = 2.0;
-	//MatrixXf INV = robot1.Inverse_kinematics(Xd);
+	//INV = robot1.Inverse_kinematics(Xd);
 	//std::cout << "Inverse 1 newton \n" << INV << "\n";
-	INV = robot1.Inverse_kinematics_d(Xd,0.5);
+	//std::cout << robot1.FWD_kinematics(INV) << "\n";
+	/*INV = robot1.Inverse_kinematics_d(Xd, 0.5);
 	std::cout << "Inverse 2 differatial \n" << INV << "\n";
-	/*std::cout << robot1.FWD_kinematics(INV) << "\n";
+	
 	std::cout << robot1.FWD_orientation(INV) << "\n ";*/
 	//float q00 = INV(0, 0);
 	//float q01 = INV(1, 0);
@@ -112,3 +134,19 @@ void main()
 	std::cout << Q1 - Q2 << "\n";*/
 
 }
+
+/*
+* DH table to urdf where 0 is dead flat
+|0|0.425|0|1.57|true|
+|0|0|0.75|0|true|
+|0|0|0.75|0|true|
+|0|0|0.55|0|true|
+|0|0.1|0|1.5708|true|
+
+DH table matching the ros_pkg:
+|0|0.425|0|1.57|true|
+|1.57|0|0.75|0|true|
+|0|0|0.75|0|true|
+|0|0|0.55|0|true|
+|0|0|0.1|0|true|
+*/

@@ -72,8 +72,9 @@ void robot::add_DH_line(double alfa, double r, double d)
 **/
 MatrixXf robot::FWD_kinematics(MatrixXf Q)
 {
+	Q(1, 0) = Q(1,0)+ M_PI/2;
 	assert(Q.rows() == _alfa.size() && "Number of joint values in Q don't match number of robot's joints");
-	assert(link_names.size() > 1  && "Please Insert at least 2 links to start");
+	assert((link_names.size() > 1 || _alfa.size()>0)  && "Please Insert at least 2 links to start");
 	return(FWD_Kinematics_vector(Q, this->_alfa, this->_r, this->_d));
 }
 MatrixXf robot::FWD_orientation(MatrixXf Q)
@@ -88,7 +89,7 @@ MatrixXf robot::FWD_orientation(MatrixXf Q)
 MatrixXf robot::Inverse_kinematics(MatrixXf Xd)
 {
 	assert(Xd.rows() == 3 && "Please Enter 3 values :  X,Y,Z of the end effector");
-	assert(link_names.size() > 1 && "Please Insert at least 2 links to start");
+	assert((link_names.size() > 1 || _alfa.size() > 0) && "Please Insert at least 2 links to start");
 	return(Newton_Raphson_IK_vector(Xd, this->_alfa, this->_r, this->_d));
 }
 std::vector<std::tuple<std::vector<float>, std::vector<float>, std::vector<float>>> robot::Trajectory_generation_Qubic(float t0, float tf, std::vector<std::vector<float>> vec_q0, std::vector<std::vector<float>> vec_qf, int n)
@@ -135,6 +136,10 @@ std::vector<std::tuple<std::vector<float>, std::vector<float>, std::vector<float
 **/
 void robot::Robot_resume()
 {
+	for (size_t i = 0; i < _alfa.size(); i++)
+	{
+		std::cout << _d[i] << "|" << _r[i] << "|" << _alfa[i] << "|" << "\n";
+	}
 }
 MatrixXf robot::Inverse_kinematics_d(MatrixXf Xd, double gamma)
 {
@@ -183,7 +188,7 @@ MatrixXf robot::Inverse_kinematics_Q(MatrixXf Xd, MatrixXf Od, MatrixXf Init, do
 	eo = ori - orientation;
 	MatrixXf e(6, 1);
 	e << ep, eo;
-	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) /*|| (std::abs(eo(0, 0)) > 0.01)*/ || (std::abs(eo(1, 0)) > 0.01) /*|| (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 5000))
+	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) || (std::abs(eo(0, 0)) > 0.01) || (std::abs(eo(1, 0)) > 0.01) /*|| (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 5000))
 	{
 
 		iteration++;
