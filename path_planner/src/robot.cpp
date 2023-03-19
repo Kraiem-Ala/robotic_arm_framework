@@ -73,7 +73,8 @@ void robot::add_DH_line(double alfa, double r, double d)
 MatrixXf robot::FWD_kinematics(MatrixXf Q)
 {
 	assert(Q.rows() == _alfa.size() && "Number of joint values in Q don't match number of robot's joints");
-	assert(link_names.size() > 1  && "Please Insert at least 2 links to start");
+	assert(_alfa.size()  > 0  && "Please Insert at least 2 links to start");
+	Q(1,0) = Q(1,0)+M_PI_2;
 	return(FWD_Kinematics_vector(Q, this->_alfa, this->_r, this->_d));
 }
 /**
@@ -83,7 +84,7 @@ MatrixXf robot::FWD_kinematics(MatrixXf Q)
 MatrixXf robot::Inverse_kinematics(MatrixXf Xd, MatrixXf init)
 {
 	assert(Xd.rows() == 3 && "Please Enter 3 values :  X,Y,Z of the end effector");
-	assert(link_names.size() > 1 && "Please Insert at least 2 links to start");
+	assert(_alfa.size()  > 0 && "Please Insert at least 2 links to start");
 	return(Newton_Raphson_IK_vector(Xd, this->_alfa, this->_r, this->_d, init));
 }
 std::vector<std::tuple<std::vector<double>, std::vector<double>, std::vector<double>>> robot::Trajectory_generation_Qubic(float t0, float tf, std::vector<std::vector<float>> vec_q0, std::vector<std::vector<float>> vec_qf, int n)
@@ -169,7 +170,7 @@ MatrixXf robot::Inverse_kinematics_Q(MatrixXf Xd, MatrixXf Od, MatrixXf Init, do
 	//eo = Od - FWD_o;
 	MatrixXf e(6, 1);
 	e << ep, eo;
-	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) /*|| (std::abs(eo(0, 0)) > 0.01) || (std::abs(eo(1, 0)) > 0.001) || (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 5000))
+	while (((std::abs(ep(0, 0)) > 0.001) || (std::abs(ep(1, 0)) > 0.001) || (std::abs(ep(2, 0)) > 0.001) || (std::abs(eo(0, 0)) > 0.01) || (std::abs(eo(1, 0)) > 0.001) /*|| (std::abs(eo(2, 0)) > 0.01)*/) && (iteration < 50000))
 	{
 
 		iteration++;
@@ -177,8 +178,8 @@ MatrixXf robot::Inverse_kinematics_Q(MatrixXf Xd, MatrixXf Od, MatrixXf Init, do
 
 		i_1_theta = i_theta + Gamma * invJ * e;
 
-		FWD_p = FWD_kinematics(i_theta);
-		FWD_o = FWD_orientation(i_theta);
+		FWD_p = FWD_kinematics(i_1_theta);
+		FWD_o = FWD_orientation(i_1_theta);
 		eo = Od - FWD_o;
 		orientation = Quaternion(FWD_o);
 		ep = Xd - FWD_p;

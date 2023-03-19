@@ -14,55 +14,60 @@ double constrainAngle(double x){
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "joint_calculator");
-	robot robot1;
-	
+	robot robot1;	
 	/*robot1.add_link("Base_link", 0.25, Joint_Revolute, Joint_Axis_Y, true);
 	robot1.add_link("link1", 0.175, Joint_Revolute, Joint_Axis_Y, false);
 	robot1.add_link("link2", 0.75, Joint_Revolute, Joint_Axis_Z, false);
 	robot1.add_link("link3", 0.75, Joint_Revolute, Joint_Axis_Z, false);
 	robot1.add_link("link4", 0.55, Joint_Revolute, Joint_Axis_Z, false);
-	robot1.add_link("gripper", 0.1, Joint_Revolute, Joint_Axis_Y, false);
+	robot1.add_link("gripper", 0.1, Joint_Revolute, Joint_Axis_Y, false);*/
+	robot1.add_DH_line(1.5718,0.0,0.425);
+	robot1.add_DH_line(0, 0.75, 0.0);
+	robot1.add_DH_line(0, 0.75, 0.0);
+	robot1.add_DH_line(0, 0.65, 0.0);
+	robot1.add_DH_line(1.5718, 0.0, 0.0);
 	robot1.Robot_resume();
-	std::uniform_real_distribution<double> unif(-M_PI,M_PI);
-	std::default_random_engine re;
 	MatrixXf theta(5,1), Xd(3, 1),Od(3, 1), fwd(5,1), Xf(3, 1),Of(3, 1),Xw(3, 1);
-	ros::NodeHandle n;
+	theta(0, 0) = 0.0;
+	theta(1, 0) = 0.0;
+	theta(2, 0) = 0.0;
+	theta(3, 0) = 0.0;
+	theta(4, 0) = 0.0;
+	std::cout<<robot1.FWD_kinematics(theta)<<'\n'<<robot1.FWD_orientation(theta)<<"\n";
+	
+	/*ros::NodeHandle n;
 	ros::Publisher chatter_pub = n.advertise<std_msgs::Float64MultiArray>("/robot_teta_controllers/command/", 10);
 	ros::Publisher trajectory_pub = n.advertise<trajectory_msgs::JointTrajectory>("/robot_arm_controller/command/", 10);
-	ros::Publisher gripper = n.advertise<std_msgs::Float64MultiArray>("/gripper_position_controller/command/", 10);
-	theta(0, 0) = rand() / (double(RAND_MAX) + 1.0);
-	theta(1, 0) = rand() / (double(RAND_MAX) + 1.0);
-	theta(2, 0) = rand() / (double(RAND_MAX) + 1.0);
-	theta(3, 0) = rand() / (double(RAND_MAX) + 1.0);
-	theta(4, 0) = rand() / (double(RAND_MAX) + 1.0);
+	ros::Publisher gripper = n.advertise<std_msgs::Float64MultiArray>("/gripper_position_controller/command/", 10);*/
 	
-	std::cout<<"Random Init = \n"<<theta<<"\n\n";
+	std::cout<<"Goal is "<<theta<<"\n\n";
 	Xd(0, 0) = -0.75;
-	Xd(1, 0) = 0.0;
-	Xd(2, 0) = 1.0;
+	Xd(1, 0) = 0.0001;
+	Xd(2, 0) = 0.525;
 
-	Od<<0.5,0.3,0.0;
+	//Od<<0.0,0.0,0.0;
 	
 	Xw(0, 0) = 0.0;
 	Xw(1, 0) = 0.75;
 	Xw(2, 0) = 1.75;
 	
-	Of<<0.0,M_PI_2,0.0;
-	Xf(0, 0) = -1.0;
-	Xf(1, 0) = -1.0;
-	Xf(2, 0) = 1.25;
+	Of<<0.0,0.0,0.0;
+	Xf(0, 0) = 0.0;
+	Xf(1, 0) = 0.0;
+	Xf(2, 0) = 0.0;
 
-	MatrixXf INV = robot1.Inverse_kinematics_Q(Xd,Od,theta,1.0);
+	MatrixXf INV = robot1.Inverse_kinematics_Q(Xd,Xf,theta,1);
+	//MatrixXf INV = robot1.Inverse_kinematics(Xd,theta);
 	std::cout <<"\n FWD of INV \n"<< robot1.FWD_kinematics(INV) <<"\n" << robot1.FWD_orientation(INV)<<"\n INV = \n";
 	INV(0, 0) = constrainAngle2(INV(0, 0));
-	INV(1, 0) = constrainAngle(INV(1, 0));
-	INV(2, 0) = constrainAngle(INV(2, 0));
-	INV(3, 0) = constrainAngle(INV(3, 0));
+	INV(1, 0) = constrainAngle2(INV(1, 0));
+	INV(2, 0) = constrainAngle2(INV(2, 0));
+	INV(3, 0) = constrainAngle2(INV(3, 0));
 	INV(4, 0) = constrainAngle2(INV(4, 0));
 	
 	std::cout << INV <<"\n \n";
 
-	INV = robot1.Inverse_kinematics(Xd,theta);
+	//INV = robot1.Inverse_kinematics(Xd,theta);
 
 	//std_msgs::Float64MultiArray cmd;
 	//trajectory_msgs::JointTrajectory trajectory;
