@@ -27,7 +27,7 @@ void main()
 	Xd(1, 0) = -0.0001;
 	Xd(2, 0) = 0.525;
 
-	Xf(0, 0) = 0/2;
+	Xf(0, 0) = 0.0;
 	Xf(1, 0) = 0.0;
 	Xf(2, 0) = 0/2;
 
@@ -40,14 +40,7 @@ void main()
 	INV(2, 0) = atan2(sin(INV(2, 0)) , cos(INV(2, 0)));
 	INV(3, 0) = atan2(sin(INV(3, 0)) , cos(INV(3, 0)));
 	INV(4, 0) = atan2(sin(INV(4, 0)) , cos(INV(4, 0)));
-	std::cout << INV << "\n FWD of INV \n" << robot1.FWD_kinematics(INV) << " INV arctan \n \n";
-
-	INV2(0, 0) = atan(sin(INV2(0, 0))/ cos(INV2(0, 0)));
-	INV2(1, 0) = atan(sin(INV2(1, 0))/ cos(INV2(1, 0)));
-	INV2(2, 0) = atan(sin(INV2(2, 0))/ cos(INV2(2, 0)));
-	INV2(3, 0) = atan(sin(INV2(3, 0))/ cos(INV2(3, 0)));
-	INV2(4, 0) = atan(sin(INV2(4, 0))/ cos(INV2(4, 0)));
-	std::cout << INV2 << "\n FWD of INV2\n" << robot1.FWD_kinematics(INV2) << "\n";
+	std::cout << INV << "\n FWD of INV \n" << robot1.FWD_kinematics(INV) << "\n "<< robot1.FWD_orientation(INV)<<"\n \n";
 	//std::cout << robot1.FWD_kinematics(INV) << "\n";
 	//std::cout << robot1.FWD_orientation(INV) << "\n ";
 
