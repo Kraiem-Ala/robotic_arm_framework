@@ -515,3 +515,44 @@ MatrixXf Compute_orientation(MatrixXf theta, std::vector<double> alpha, std::vec
 	rot(0,0) = atan2(DH0(2, 1), DH0(2, 2));
 	return rot;
 }
+
+/************* CCD IK Solver  ****************/
+std::tuple<VectorXf, VectorXf> Compute_vectors(VectorXf EE_pt, VectorXf T_pt, VectorXf Xi)
+{
+	VectorXf u1, u2;
+	u1 = (Xi - EE_pt) / (Xi - EE_pt).norm();
+	u2 = (T_pt - Xi) / (T_pt - Xi).norm();
+	return (std::make_tuple(u1,u2));
+}
+double Compute_Alfa(VectorXf u1, VectorXf u2)
+{
+	double alfa = acos(u1.dot(u2));
+	
+	return alfa;
+}
+
+MatrixXf CCD_IK(MatrixXf X_d, MatrixXf Init, std::vector<double> alpha, std::vector<double> r, std::vector<double> d)
+{
+	int iterations = 0;
+	MatrixXf Q = Init;
+	VectorXf FWD = FWD_Kinematics_vector(Q, alpha, r, d);
+	VectorXf e = X_d - FWD;
+	while (e.norm() > 0.01 || iterations <2500)
+	{
+		for (size_t i = 0; i < Q.rows(); i++)
+		{
+			FWD = FWD_Kinematics_vector(Q, alpha, r, d);
+			std::tuple<VectorXf, VectorXf> vectors = Compute_vectors(FWD, (VectorXf)X_d, Q);
+			double alfa = Compute_Alfa(std::get<0>(vectors), std::get<0>(vectors));
+			if(signbit(std::get<0>(vectors).dot(std::get<0>(vectors))) == 0)
+				Q(i, 0) = Q(i, 0) + alfa;
+			else 
+				Q(i, 0) = Q(i, 0) - alfa;
+		}
+		FWD = FWD_Kinematics_vector(Q, alpha, r, d);
+		e = X_d - FWD;
+		iterations++;
+	}
+	std::cout << "Done in " << iterations << " iterations \n";
+	return Q;
+}

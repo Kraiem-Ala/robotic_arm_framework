@@ -23,7 +23,7 @@ void main()
 	theta(4, 0) = 0.0;//M_PI/3;
 	robot1.Robot_resume();
 	
-	Xd(0, 0) = -0.75;
+	Xd(0, 0) = 0.75;
 	Xd(1, 0) = -0.0001;
 	Xd(2, 0) = 0.525;
 

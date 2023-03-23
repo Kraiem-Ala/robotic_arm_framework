@@ -3,6 +3,7 @@
 #include <cmath>
 #include <Eigen/Dense>
 #include <vector>
+#include <tuple>
 # define M_PI           3.14159265358979323846
 using Eigen::Map;
 using Eigen::MatrixXd;
@@ -104,3 +105,23 @@ MatrixXf Newton_Raphson_IK_vector(MatrixXf X_d, std::vector<double> alpha, std::
 * @return Rotation matrix of Pitch
 */
 MatrixXf Compute_orientation(MatrixXf theta, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
+
+/****************************************************************** CCD IK Solver ********************************************************/
+/**
+* @breif Calculate the vector defining the movements
+* @return a tuple of u1,u2
+*/
+std::tuple<VectorXf, VectorXf> Compute_vectors(VectorXf EE_pt, VectorXf T_pt, VectorXf Xi);
+
+/**
+* @breif Calculate the alpha angle of CCD_IK_Solver
+* @return the alpha angle
+*/
+double Compute_Alfa(VectorXf u1, VectorXf u2);
+
+/**
+* @breif Calculate the Inverse_Kinematics of X,Y,Z of the end effector
+* @param[desired config] joints' angles
+* @returnjoints' angles Matrix of the robot type MatrixXf
+*/
+MatrixXf CCD_IK(MatrixXf X_d, MatrixXf Init, std::vector<double> alpha, std::vector<double> r, std::vector<double> d);
